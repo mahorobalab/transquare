@@ -1,0 +1,55 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore transquare.slnx
+
+      - name: Publish Transquare
+        run: >
+          dotnet publish transquare/transquare.csproj
+          -c Release
+          -r win-x64
+          --self-contained false
+          -p:PublishSingleFile=false
+          -o ./publish
+
+      - name: Create ZIP archive
+        shell: pwsh
+        run: |
+          $tag = if ($env:GITHUB_REF -like "refs/tags/*") { $env:GITHUB_REF.Substring(10) } else { "latest" }
+          Compress-Archive -Path ./publish/* -DestinationPath ./Transquare-win-x64.zip -Force
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: Transquare-win-x64.zip
+          generate_release_notes: true
+
+      - name: Upload Artifact (for manual workflow dispatch)
+        if: "!startsWith(github.ref, 'refs/tags/')"
+        uses: actions/upload-artifact@v4
+        with:
+          name: Transquare-win-x64
+          path: Transquare-win-x64.zip

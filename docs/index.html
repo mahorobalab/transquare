@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transquare - OBS配信・録画用デスクトップガイド枠オーバーレイ</title>
+    <meta name="description" content="OBS配信や画面録画時に、どこが配信されているかを一目で確認できるデスクトップ赤枠オーバーレイアプリ。完全クリックスルー、Altグリッド吸着、タスクトレイ常駐に対応。">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+JP:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF3344;
+            --primary-hover: #FF1A2E;
+            --bg-dark: #0D0F12;
+            --bg-card: #161A20;
+            --bg-card-hover: #1E232B;
+            --text-main: #FFFFFF;
+            --text-sub: #9EABB8;
+            --border: #262C36;
+            --accent-green: #00E676;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .logo-box {
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--primary);
+            border-radius: 6px;
+            background: rgba(255, 51, 68, 0.1);
+            position: relative;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .lang-switch {
+            background: #1C222B;
+            border: 1px solid var(--border);
+            color: var(--text-sub);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .lang-switch:hover {
+            color: #fff;
+            border-color: #3C4654;
+        }
+
+        .btn-github {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-sub);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            transition: all 0.2s;
+        }
+
+        .btn-github:hover {
+            color: #fff;
+            border-color: #3C4654;
+            background: var(--bg-card-hover);
+        }
+
+        /* Hero */
+        .hero {
+            max-width: 1000px;
+            margin: 60px auto 40px;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 51, 68, 0.12);
+            color: #FF6675;
+            border: 1px solid rgba(255, 51, 68, 0.3);
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            line-height: 1.15;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 span {
+            color: var(--primary);
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--text-sub);
+            max-width: 680px;
+            margin: 0 auto 36px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--primary);
+            color: #fff;
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: 0 8px 24px rgba(255, 51, 68, 0.35);
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(255, 51, 68, 0.5);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-card);
+            color: #fff;
+            padding: 14px 24px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-card-hover);
+            border-color: #3C4654;
+        }
+
+        .note {
+            margin-top: 14px;
+            font-size: 13px;
+            color: #6C7A89;
+        }
+
+        /* Mockup / Visualizer */
+        .visualizer {
+            max-width: 960px;
+            margin: 40px auto 80px;
+            padding: 0 20px;
+        }
+
+        .mock-screen {
+            background: #111418;
+            border: 1px solid #232933;
+            border-radius: 16px;
+            padding: 40px 20px;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 340px;
+        }
+
+        .mock-frame {
+            border: 4px solid var(--primary);
+            border-radius: 4px;
+            width: 80%;
+            height: 240px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 51, 68, 0.03);
+            box-shadow: 0 0 30px rgba(255, 51, 68, 0.15);
+        }
+
+        .mock-hud {
+            background: rgba(20, 20, 20, 0.9);
+            border: 1px solid rgba(255, 51, 68, 0.5);
+            border-radius: 8px;
+            padding: 12px 24px;
+            text-align: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .mock-hud-title {
+            font-size: 11px;
+            color: #999;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .mock-hud-val {
+            font-size: 22px;
+            font-weight: 800;
+            color: #fff;
+            margin-top: 2px;
+        }
+
+        .mock-hud-snap {
+            font-size: 11px;
+            color: var(--accent-green);
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .mock-controls {
+            position: absolute;
+            bottom: 6px;
+            right: 6px;
+            display: flex;
+            gap: 4px;
+        }
+
+        .mock-btn {
+            background: #222;
+            border: 1px solid #666;
+            color: #fff;
+            width: 22px;
+            height: 22px;
+            border-radius: 3px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Features Section */
+        .features {
+            max-width: 1140px;
+            margin: 0 auto 100px;
+            padding: 0 20px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-header h2 {
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .section-header p {
+            color: var(--text-sub);
+            font-size: 16px;
+            margin-top: 8px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 28px;
+            transition: all 0.2s;
+        }
+
+        .feature-card:hover {
+            border-color: #384252;
+            transform: translateY(-3px);
+            background: var(--bg-card-hover);
+        }
+
+        .feature-icon {
+            font-size: 28px;
+            margin-bottom: 16px;
+        }
+
+        .feature-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .feature-card p {
+            font-size: 14px;
+            color: var(--text-sub);
+            line-height: 1.6;
+        }
+
+        /* Controls Table */
+        .controls-section {
+            max-width: 900px;
+            margin: 0 auto 100px;
+            padding: 0 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-card);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        th, td {
+            padding: 16px 20px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+        }
+
+        th {
+            background: #1B2129;
+            color: #fff;
+            font-weight: 700;
+        }
+
+        td:first-child {
+            font-weight: 600;
+            color: #fff;
+        }
+
+        td:last-child {
+            color: var(--text-sub);
+        }
+
+        /* CTA */
+        .cta {
+            background: linear-gradient(180deg, rgba(255, 51, 68, 0.08) 0%, rgba(255, 51, 68, 0) 100%);
+            border-top: 1px solid rgba(255, 51, 68, 0.2);
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+
+        .cta p {
+            color: var(--text-sub);
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 30px 20px;
+            text-align: center;
+            font-size: 13px;
+            color: #6C7A89;
+        }
+
+        footer a {
+            color: var(--text-sub);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <nav>
+        <a href="#" class="logo">
+            <div class="logo-box"></div>
+            <span>Transquare</span>
+        </a>
+        <div class="nav-links">
+            <button class="lang-switch" id="langToggle">English</button>
+            <a href="https://github.com/mahorobalab/transquare" target="_blank" class="btn-github">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                <span>GitHub</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-badge" data-ja="✨ OBS 配信者・動画制作者のためのオーバーレイ枠" data-en="✨ Desktop Overlay Frame for Streamers & Creators">
+            ✨ OBS 配信者・動画制作者のためのオーバーレイ枠
+        </div>
+        <h1 data-ja="配信エリアが、<span>一目でわかる。</span>" data-en="See Your Stream Capture Area, <span>Instantly.</span>">
+            配信エリアが、<span>一目でわかる。</span>
+        </h1>
+        <p data-ja="Transquare（トランスケア）は、ゲームや作業の邪魔をしない完全クリックスルー対応のデスクトップ赤枠ガイドアプリです。Alt吸着移動・リアルタイムHUD・タスクトレイ常駐に対応。"
+           data-en="Transquare is a click-through desktop overlay frame designed for OBS broadcasting and screen recording. Featuring Alt-key grid snapping, real-time HUD, and system tray integration.">
+            Transquare（トランスケア）は、ゲームや作業の邪魔をしない完全クリックスルー対応のデスクトップ赤枠ガイドアプリです。Alt吸着移動・リアルタイムHUD・タスクトレイ常駐に対応。
+        </p>
+        <div class="hero-buttons">
+            <a href="https://github.com/mahorobalab/transquare/releases/latest" class="btn-primary" target="_blank">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                <span data-ja="最新版をダウンロード (ZIP)" data-en="Download Latest Release (ZIP)">最新版をダウンロード (ZIP)</span>
+            </a>
+            <a href="https://github.com/mahorobalab/transquare" class="btn-secondary" target="_blank">
+                <span data-ja="ソースコードを見る" data-en="View on GitHub">ソースコードを見る</span>
+            </a>
+        </div>
+        <div class="note" data-ja="インストール不要（ZIPを展開して実行するだけ） • Windows 10/11 • 無料・オープンソース (MIT)"
+             data-en="No installation needed (unzip & run) • Windows 10/11 • Free & Open Source (MIT)">
+            インストール不要（ZIPを展開して実行するだけ） • Windows 10/11 • 無料・オープンソース (MIT)
+        </div>
+    </header>
+
+    <!-- Visualizer Mockup -->
+    <section class="visualizer">
+        <div class="mock-screen">
+            <div class="mock-frame">
+                <div class="mock-hud">
+                    <div class="mock-hud-title" data-ja="位置（ディスプレイ左上から）" data-en="POSITION (FROM TOP-LEFT)">位置（ディスプレイ左上から）</div>
+                    <div class="mock-hud-val">X: 192 px &nbsp; Y: 108 px</div>
+                    <div class="mock-hud-snap" data-ja="⚡ Altグリッド吸着中 (20px)" data-en="⚡ Alt Grid Snapping (20px)">⚡ Altグリッド吸着中 (20px)</div>
+                </div>
+                <div class="mock-controls">
+                    <div class="mock-btn">⚙</div>
+                    <div class="mock-btn">◪</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features">
+        <div class="section-header">
+            <h2 data-ja="配信者のための、こだわり抜いた機能" data-en="Built Specifically for Streamers">配信者のための、こだわり抜いた機能</h2>
+            <p data-ja="配信画面の調整を極限までシンプル・快適にするためのツールです" data-en="Everything you need for effortless, precision capture framing">配信画面の調整を極限までシンプル・快適にするためのツールです</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎮</div>
+                <h3 data-ja="完全クリックスルー" data-en="Pure Click-Through">完全クリックスルー</h3>
+                <p data-ja="赤枠の内側は完全に透明です。枠の真ん中でゲームプレイやブラウザ操作をしても一切クリックが引っかかりません。"
+                   data-en="The interior of the frame is 100% transparent to clicks. Play games, click links, and browse freely without obstruction.">
+                   赤枠の内側は完全に透明です。枠の真ん中でゲームプレイやブラウザ操作をしても一切クリックが引っかかりません。
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3 data-ja="Altキーでグリッド吸着" data-en="Alt-Key Grid Snapping">Altキーでグリッド吸着</h3>
+                <p data-ja="Altキーを押しながら移動やリサイズを行うと、10px / 20px / 50px / 100px のグリッド単位でピタッと綺麗に吸着します。"
+                   data-en="Hold the Alt key while moving or resizing to snap cleanly to customizable pixel grids (10px, 20px, 50px, 100px).">
+                   Altキーを押しながら移動やリサイズを行うと、10px / 20px / 50px / 100px のグリッド単位でピタッと綺麗に吸着します。
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3 data-ja="大きな文字のHUD表示" data-en="Large Real-Time HUD">大きな文字のHUD表示</h3>
+                <p data-ja="ドラッグ操作中、画面中央に現在の座標（X / Y）やサイズ（幅×高さ）が大きく表示され、OBSのトランスフォーム設定に迷いません。"
+                   data-en="While dragging, readable coordinates (X/Y) and dimensions (W×H) pop up in screen center to easily match OBS Transform settings.">
+                   ドラッグ操作中、画面中央に現在の座標（X / Y）やサイズ（幅×高さ）が大きく表示され、OBSのトランスフォーム設定に迷いません。
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📐</div>
+                <h3 data-ja="角・中央への一括スナップ" data-en="Instant Screen Snapping">角・中央への一括スナップ</h3>
+                <p data-ja="メニューから「左上 / 右上 / 画面中央 / 上下左右の中央」へ一発移動。マルチモニター環境の画面端にも自動追従します。"
+                   data-en="Snap directly to any screen corner or center position with one click. Multi-monitor displays are fully supported.">
+                   メニューから「左上 / 右上 / 画面中央 / 上下左右の中央」へ一発移動。マルチモニター環境の画面端にも自動追従します。
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🎨</div>
+                <h3 data-ja="ホバーでリアルタイムプレビュー" data-en="Live Hover Preview">ホバーでリアルタイムプレビュー</h3>
+                <p data-ja="枠線の色、太さ、不透明度（10%〜100%）は、メニューにマウスを乗せるだけでその場でプレビュー変化します。"
+                   data-en="Hover over border colors, line thickness, or opacity options (10% to 100%) to instantly preview the look in real time.">
+                   枠線の色、太さ、不透明度（10%〜100%）は、メニューにマウスを乗せるだけでその場でプレビュー変化します。
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">💾</div>
+                <h3 data-ja="自動保存 ＆ 4つのプリセット" data-en="Auto-Save & 4 Presets">自動保存 ＆ 4つのプリセット</h3>
+                <p data-ja="前回の位置・サイズ・設定を終了時に自動保存。さらにお気に入りの設定を最大4つまでプリセットとして保存・切替可能です。"
+                   data-en="Automatically restores your last position and styles on restart. Store up to 4 custom presets for different games and scenes.">
+                   前回の位置・サイズ・設定を終了時に自動保存。さらにお気に入りの設定を最大4つまでプリセットとして保存・切替可能です。
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📥</div>
+                <h3 data-ja="タスクトレイ常駐 ＆ ワンクリック表示切替" data-en="Tray Icon & Instant Toggle">タスクトレイ常駐 ＆ ワンクリック表示切替</h3>
+                <p data-ja="タスクトレイアイコンを左クリックするだけで、枠の「表示 / 非表示」を瞬時にトグル切り替えできます。"
+                   data-en="Left-click the system tray icon anytime to instantly show or hide the overlay frame with zero hassle.">
+                   タスクトレイアイコンを左クリックするだけで、枠の「表示 / 非表示」を瞬時にトグル切り替えできます。
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🌐</div>
+                <h3 data-ja="多言語対応（日本語 / English）" data-en="Multilingual Ready">多言語対応（日本語 / English）</h3>
+                <p data-ja="OSの言語を自動認識。メニューからいつでも日本語と英語を切り替えることができます。"
+                   data-en="Automatically matches your operating system language, with one-click manual switching right from the context menu.">
+                   OSの言語を自動認識。メニューからいつでも日本語と英語を切り替えることができます。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Controls Table -->
+    <section class="controls-section">
+        <div class="section-header">
+            <h2 data-ja="操作方法" data-en="Controls & Shortcuts">操作方法</h2>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th data-ja="操作" data-en="Action">操作</th>
+                    <th data-ja="動作" data-en="Result">動作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td data-ja="右下の ⚙ ボタン" data-en="Click ⚙ Button">右下の ⚙ ボタン</td>
+                    <td data-ja="設定メニューを表示（左クリック・右クリック両対応）" data-en="Open settings menu (supports Left and Right click)">設定メニューを表示（左クリック・右クリック両対応）</td>
+                </tr>
+                <tr>
+                    <td data-ja="赤枠線上を左ドラッグ" data-en="Left-Drag on Line">赤枠線上を左ドラッグ</td>
+                    <td data-ja="枠を自由に移動（移動ロック解除時）" data-en="Move window freely (when Move Lock is disabled)">枠を自由に移動（移動ロック解除時）</td>
+                </tr>
+                <tr>
+                    <td data-ja="Alt + 左ドラッグ" data-en="Alt + Left-Drag">Alt + 左ドラッグ</td>
+                    <td data-ja="グリッド吸着移動（指定間隔でスナップ）" data-en="Snap to grid while moving (10px / 20px / 50px / 100px)">グリッド吸着移動（指定間隔でスナップ）</td>
+                </tr>
+                <tr>
+                    <td data-ja="右下の四角グリップをドラッグ" data-en="Drag Bottom-Right Grip">右下の四角グリップをドラッグ</td>
+                    <td data-ja="枠のサイズ変更（サイズロック解除時、Altで吸着）" data-en="Resize window (when Size Lock is disabled; hold Alt to snap)">枠のサイズ変更（サイズロック解除時、Altで吸着）</td>
+                </tr>
+                <tr>
+                    <td data-ja="トレイアイコン左クリック" data-en="Left-Click Tray Icon">トレイアイコン左クリック</td>
+                    <td data-ja="枠の表示 / 非表示トグル切り替え" data-en="Toggle frame visibility (Show / Hide)">枠の表示 / 非表示トグル切り替え</td>
+                </tr>
+                <tr>
+                    <td data-ja="トレイアイコン右クリック" data-en="Right-Click Tray Icon">トレイアイコン右クリック</td>
+                    <td data-ja="設定メニューを表示（非表示中でも操作可能）" data-en="Open settings menu (usable even when hidden)">設定メニューを表示（非表示中でも操作可能）</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Bottom CTA -->
+    <section class="cta">
+        <h2 data-ja="さあ、Transquare で快適な配信をはじめよう。" data-en="Ready for Smarter Streaming?">さあ、Transquare で快適な配信をはじめよう。</h2>
+        <p data-ja="インストール不要ですぐにお使いいただけます。" data-en="Free, open source, and ready to use in seconds.">インストール不要ですぐにお使いいただけます。</p>
+        <a href="https://github.com/mahorobalab/transquare/releases/latest" class="btn-primary" target="_blank">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span data-ja="最新版をダウンロード (ZIP)" data-en="Download Latest Release (ZIP)">最新版をダウンロード (ZIP)</span>
+        </a>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 <a href="https://github.com/mahorobalab" target="_blank">mahorobalab</a>. Released under the MIT License.</p>
+    </footer>
+
+    <!-- Interactive Script -->
+    <script>
+        let currentLang = 'ja';
+        const langToggle = document.getElementById('langToggle');
+
+        langToggle.addEventListener('click', () => {
+            currentLang = (currentLang === 'ja') ? 'en' : 'ja';
+            langToggle.textContent = (currentLang === 'ja') ? 'English' : '日本語';
+            document.documentElement.lang = currentLang;
+
+            document.querySelectorAll('[data-ja]').forEach(el => {
+                const text = el.getAttribute(`data-${currentLang}`);
+                if (text) {
+                    if (el.tagName === 'SPAN' || el.children.length === 0) {
+                        el.innerHTML = text;
+                    } else if (el.querySelector('span')) {
+                        el.querySelector('span').innerHTML = text;
+                    } else {
+                        el.innerHTML = text;
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

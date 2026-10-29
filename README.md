@@ -1,55 +1,77 @@
-# Transquare (Streaming Frame)
+<div align="center">
 
-OBS配信や画面録画時に、**「どこが配信領域になっているか」を視覚的にガイド表示するデスクトップオーバーレイ枠アプリ**です。
+# Transquare
 
-![Transquare Icon](transquare/andrsrxn-image-square.ico)
+**An intuitive, unobtrusive desktop overlay frame for OBS streaming and screen recording.**
 
----
+**English** | [日本語 (Japanese)](README_ja.md) | [🌐 Official Website](https://mahorobalab.github.io/transquare/)
 
-## 主な特徴
+<br />
 
-- 🎮 **完全クリックスルー（枠内すり抜け操作）**
-  - 赤枠の内側は完全にマウス操作が背後に透過するため、ゲームやブラウザ等の操作・配信作業を一切妨げません。
-- 🔒 **誤操作防止（移動・サイズロック）**
-  - 初期起動時は移動・サイズ変更がロックされており、配信中に誤ってズレるのを防ぎます。
-- ⚡ **Alt キーによるグリッド吸着移動＆リサイズ**
-  - `Alt` キーを押しながらドラッグ移動・サイズ変更すると、指定グリッド単位（10px / 20px / 50px / 100px）でピタッとスナップします。
-- 🎯 **大きな文字でのHUDリアルタイム表示**
-  - 移動時はディスプレイ原点からの座標 `X (左) / Y (上)`、サイズ変更時は `幅 × 高さ` が中央に大きくポップアップ表示されます（OBSのトランスフォーム設定にそのまま入力可能）。
-- 📐 **枠位置の一括スナップ配置**
-  - 「角（左上 / 右上 / 左下 / 右下）」や「中央（画面中央 / 上・下・左・右）」へワンクリックでスナップ移動可能。マルチモニターにも対応。
-- 🎨 **リアルタイムプレビュー**
-  - 枠線の不透明度（10%〜100%）、太さ（2〜8px）、色（赤/青/緑/黄/白）をメニューホバー時にその場でプレビュー確認できます。
-- 💾 **設定の自動保存 ＆ ユーザープリセット（1〜4）**
-  - 最後の位置・サイズ・スタイル設定を自動保存し、次回復元。
-  - お好みの位置・サイズを 4 つのプリセットに保存・一発切り替え可能。
-- 📥 **タスクトレイ常駐 ＆ タスクバー表示切り替え**
-  - タスクトレイアイコンの**左クリックで枠の表示/非表示を瞬時にトグル切り替え**。
-- 🌐 **多言語対応（日本語 / English）**
-  - OS設定に応じた自動切り替えおよび手動切り替えに対応。
+[![Latest Release](https://img.shields.io/github/v/release/mahorobalab/transquare?style=for-the-badge&logo=windows&logoColor=white&label=Download%20ZIP&color=E60012)](https://github.com/mahorobalab/transquare/releases/latest)
+
+<br />
+
+### 📥 [Download Latest Version (ZIP) from GitHub Releases](https://github.com/mahorobalab/transquare/releases/latest)
+*(Simply extract the downloaded ZIP and run `transquare.exe`. No installation required!)*
+
+</div>
 
 ---
 
-## 動作環境
+## 🎯 What is Transquare?
 
-- OS: Windows 10 / 11
-- ランタイム: .NET 8.0 (Windows Desktop Runtime)
+When streaming games, broadcasting work, or recording video, **Transquare** clearly marks the exact capture region on your display so you always know what your viewers see.
+
+Built specifically for streamers with pure click-through transparency and smooth docking controls.
 
 ---
 
-## 操作方法
+## ✨ Features
 
-| 操作 | 動作 |
+- 🎮 **Full Click-Through Transparency**
+  - Mouse events pass completely through the interior of the frame, letting you click, drag, and play games without interference.
+- 🔒 **Accidental Drag Prevention (Move & Size Lock)**
+  - Move and resize are locked by default so the frame never shifts by mistake during broadcast.
+- ⚡ **Alt-Key Grid Snapping**
+  - Hold `Alt` while moving or resizing to snap cleanly to customizable grid increments (10px / 20px / 50px / 100px).
+- 🎯 **Large Heads-Up Display (HUD)**
+  - Real-time `X / Y` coordinates and `Width × Height` dimensions appear in big, readable text at screen center while dragging (matches OBS Transform values).
+- 📐 **Instant Screen Snapping**
+  - One-click snap to corners (Top-Left, Top-Right, Bottom-Left, Bottom-Right) or center positions (Screen Center, Top, Bottom, Left, Right). Multi-monitor ready.
+- 🎨 **Real-Time Hover Preview**
+  - Preview border opacity (10%–100%), thickness (2–8px), and colors (Red/Cyan/Lime/Yellow/White) in real time just by hovering over menu options.
+- 💾 **Auto-Save & 4 Custom Presets**
+  - Auto-saves last window position, size, and styles on exit.
+  - Store up to 4 custom position/size presets for fast switching between different games or scenes.
+- 📥 **System Tray (NotifyIcon) Integration**
+  - **Left-click the tray icon to instantly toggle the frame visible / hidden**.
+  - Right-click anywhere on the tray icon to open the full settings menu.
+- 🌐 **Multilingual Support (English & Japanese)**
+  - Automatically detects your OS language with instant in-app switching.
+
+---
+
+## 🕹 Controls
+
+| Action | Result |
 | :--- | :--- |
-| **右下の ⚙ ボタン** | 設定メニューのポップアップ（左クリック / 右クリック両対応） |
-| **赤枠線上を左ドラッグ** | 枠を移動（移動ロック解除時） |
-| **`Alt` + 左ドラッグ** | グリッド吸着移動（指定間隔でスナップ） |
-| **右下の四角グリップをドラッグ** | 枠のサイズ変更（サイズロック解除時、`Alt` で吸着） |
-| **タスクトレイアイコン左クリック** | 枠の表示 / 非表示トグル切り替え |
-| **タスクトレイアイコン右クリック** | 設定メニューの表示 |
+| **Click ⚙ Button (Bottom-Right)** | Open settings menu (supports Left and Right click) |
+| **Left-Drag on Frame Line** | Move window (when Move Lock is disabled) |
+| **`Alt` + Left-Drag** | Snap to grid while moving |
+| **Drag Bottom-Right Grip** | Resize window (when Size Lock is disabled; hold `Alt` to snap) |
+| **Left-Click Tray Icon** | Toggle frame visibility (Show / Hide) |
+| **Right-Click Tray Icon** | Open settings menu |
 
 ---
 
-## ライセンス
+## 💻 Requirements
 
-MIT License
+- **OS**: Windows 10 / 11 (64-bit)
+- **Runtime**: [.NET 8.0 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/8.0) (pre-installed on most modern Windows systems)
+
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE).
