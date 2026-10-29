@@ -81,49 +81,50 @@
                     </MenuItem>
                     <Separator />
 
+                    <!-- Alt吸着グリッドサイズ (選択中チェック付き) -->
                     <MenuItem x:Name="MenuGroupSnap" Header="Alt吸着グリッドサイズ">
-                        <MenuItem x:Name="MenuSnap10" Header="10 px" Click="MenuGrid_Click" Tag="10" />
-                        <MenuItem x:Name="MenuSnap20" Header="20 px (標準)" Click="MenuGrid_Click" Tag="20" />
-                        <MenuItem x:Name="MenuSnap50" Header="50 px" Click="MenuGrid_Click" Tag="50" />
-                        <MenuItem x:Name="MenuSnap100" Header="100 px" Click="MenuGrid_Click" Tag="100" />
+                        <MenuItem x:Name="MenuSnap10" Header="10 px" IsCheckable="True" Click="MenuGrid_Click" Tag="10" />
+                        <MenuItem x:Name="MenuSnap20" Header="20 px (標準)" IsCheckable="True" Click="MenuGrid_Click" Tag="20" />
+                        <MenuItem x:Name="MenuSnap50" Header="50 px" IsCheckable="True" Click="MenuGrid_Click" Tag="50" />
+                        <MenuItem x:Name="MenuSnap100" Header="100 px" IsCheckable="True" Click="MenuGrid_Click" Tag="100" />
                     </MenuItem>
 
-                    <!-- 枠の太さ（ホバーでリアルタイムプレビュー） -->
+                    <!-- 枠の太さ (選択中チェック付き) -->
                     <MenuItem x:Name="MenuGroupThickness" Header="枠の太さ">
-                        <MenuItem Header="2 px" Click="MenuThickness_Click" MouseEnter="MenuThickness_MouseEnter" Tag="2" />
-                        <MenuItem Header="4 px" Click="MenuThickness_Click" MouseEnter="MenuThickness_MouseEnter" Tag="4" />
-                        <MenuItem Header="6 px" Click="MenuThickness_Click" MouseEnter="MenuThickness_MouseEnter" Tag="6" />
-                        <MenuItem Header="8 px" Click="MenuThickness_Click" MouseEnter="MenuThickness_MouseEnter" Tag="8" />
+                        <MenuItem Header="2 px" IsCheckable="True" Click="MenuThickness_Click" MouseEnter="MenuThickness_MouseEnter" Tag="2" />
+                        <MenuItem Header="4 px" IsCheckable="True" Click="MenuThickness_Click" MouseEnter="MenuThickness_MouseEnter" Tag="4" />
+                        <MenuItem Header="6 px" IsCheckable="True" Click="MenuThickness_Click" MouseEnter="MenuThickness_MouseEnter" Tag="6" />
+                        <MenuItem Header="8 px" IsCheckable="True" Click="MenuThickness_Click" MouseEnter="MenuThickness_MouseEnter" Tag="8" />
                     </MenuItem>
 
-                    <!-- 枠線の透明度（ホバーでリアルタイムプレビュー、クリックで確定） -->
+                    <!-- 枠線の透明度 (選択中チェック付き) -->
                     <MenuItem x:Name="MenuGroupOpacity" Header="枠線の不透明度">
-                        <MenuItem x:Name="MenuOpacity100" Header="100% (標準)" Click="MenuOpacity_Click" MouseEnter="MenuOpacity_MouseEnter" Tag="1.0" />
-                        <MenuItem Header="90%" Click="MenuOpacity_Click" MouseEnter="MenuOpacity_MouseEnter" Tag="0.9" />
-                        <MenuItem Header="80%" Click="MenuOpacity_Click" MouseEnter="MenuOpacity_MouseEnter" Tag="0.8" />
-                        <MenuItem Header="70%" Click="MenuOpacity_Click" MouseEnter="MenuOpacity_MouseEnter" Tag="0.7" />
-                        <MenuItem Header="60%" Click="MenuOpacity_Click" MouseEnter="MenuOpacity_MouseEnter" Tag="0.6" />
-                        <MenuItem Header="50%" Click="MenuOpacity_Click" MouseEnter="MenuOpacity_MouseEnter" Tag="0.5" />
-                        <MenuItem Header="40%" Click="MenuOpacity_Click" MouseEnter="MenuOpacity_MouseEnter" Tag="0.4" />
-                        <MenuItem Header="30%" Click="MenuOpacity_Click" MouseEnter="MenuOpacity_MouseEnter" Tag="0.3" />
-                        <MenuItem Header="20%" Click="MenuOpacity_Click" MouseEnter="MenuOpacity_MouseEnter" Tag="0.2" />
-                        <MenuItem Header="10%" Click="MenuOpacity_Click" MouseEnter="MenuOpacity_MouseEnter" Tag="0.1" />
+                        <MenuItem x:Name="MenuOpacity100" Header="100% (標準)" IsCheckable="True" Click="MenuOpacity_Click" MouseEnter="MenuOpacity_MouseEnter" Tag="1.0" />
+                        <MenuItem Header="90%" IsCheckable="True" Click="MenuOpacity_Click" MouseEnter="MenuOpacity_MouseEnter" Tag="0.9" />
+                        <MenuItem Header="80%" IsCheckable="True" Click="MenuOpacity_Click" MouseEnter="MenuOpacity_MouseEnter" Tag="0.8" />
+                        <MenuItem Header="70%" IsCheckable="True" Click="MenuOpacity_Click" MouseEnter="MenuOpacity_MouseEnter" Tag="0.7" />
+                        <MenuItem Header="60%" IsCheckable="True" Click="MenuOpacity_Click" MouseEnter="MenuOpacity_MouseEnter" Tag="0.6" />
+                        <MenuItem Header="50%" IsCheckable="True" Click="MenuOpacity_Click" MouseEnter="MenuOpacity_MouseEnter" Tag="0.5" />
+                        <MenuItem Header="40%" IsCheckable="True" Click="MenuOpacity_Click" MouseEnter="MenuOpacity_MouseEnter" Tag="0.4" />
+                        <MenuItem Header="30%" IsCheckable="True" Click="MenuOpacity_Click" MouseEnter="MenuOpacity_MouseEnter" Tag="0.3" />
+                        <MenuItem Header="20%" IsCheckable="True" Click="MenuOpacity_Click" MouseEnter="MenuOpacity_MouseEnter" Tag="0.2" />
+                        <MenuItem Header="10%" IsCheckable="True" Click="MenuOpacity_Click" MouseEnter="MenuOpacity_MouseEnter" Tag="0.1" />
                     </MenuItem>
 
-                    <!-- 枠の色（ホバーでリアルタイムプレビュー、クリックで確定） -->
+                    <!-- 枠の色 (選択中チェック付き) -->
                     <MenuItem x:Name="MenuGroupColor" Header="枠の色">
-                        <MenuItem x:Name="MenuColorRed" Header="赤 (Red)" Click="MenuColor_Click" MouseEnter="MenuColor_MouseEnter" Tag="Red" />
-                        <MenuItem x:Name="MenuColorCyan" Header="青 (Cyan)" Click="MenuColor_Click" MouseEnter="MenuColor_MouseEnter" Tag="Cyan" />
-                        <MenuItem x:Name="MenuColorLime" Header="緑 (Lime)" Click="MenuColor_Click" MouseEnter="MenuColor_MouseEnter" Tag="Lime" />
-                        <MenuItem x:Name="MenuColorYellow" Header="黄 (Yellow)" Click="MenuColor_Click" MouseEnter="MenuColor_MouseEnter" Tag="Yellow" />
-                        <MenuItem x:Name="MenuColorWhite" Header="白 (White)" Click="MenuColor_Click" MouseEnter="MenuColor_MouseEnter" Tag="White" />
+                        <MenuItem x:Name="MenuColorRed" Header="赤 (Red)" IsCheckable="True" Click="MenuColor_Click" MouseEnter="MenuColor_MouseEnter" Tag="Red" />
+                        <MenuItem x:Name="MenuColorCyan" Header="青 (Cyan)" IsCheckable="True" Click="MenuColor_Click" MouseEnter="MenuColor_MouseEnter" Tag="Cyan" />
+                        <MenuItem x:Name="MenuColorLime" Header="緑 (Lime)" IsCheckable="True" Click="MenuColor_Click" MouseEnter="MenuColor_MouseEnter" Tag="Lime" />
+                        <MenuItem x:Name="MenuColorYellow" Header="黄 (Yellow)" IsCheckable="True" Click="MenuColor_Click" MouseEnter="MenuColor_MouseEnter" Tag="Yellow" />
+                        <MenuItem x:Name="MenuColorWhite" Header="白 (White)" IsCheckable="True" Click="MenuColor_Click" MouseEnter="MenuColor_MouseEnter" Tag="White" />
                     </MenuItem>
                     <Separator />
 
-                    <!-- 言語切り替えメニュー -->
+                    <!-- 言語切り替えメニュー (選択中チェック付き) -->
                     <MenuItem x:Name="MenuGroupLanguage" Header="言語 (Language)">
-                        <MenuItem x:Name="MenuLangJa" Header="日本語" Click="MenuLang_Click" Tag="ja" />
-                        <MenuItem x:Name="MenuLangEn" Header="English" Click="MenuLang_Click" Tag="en" />
+                        <MenuItem x:Name="MenuLangJa" Header="日本語" IsCheckable="True" Click="MenuLang_Click" Tag="ja" />
+                        <MenuItem x:Name="MenuLangEn" Header="English" IsCheckable="True" Click="MenuLang_Click" Tag="en" />
                     </MenuItem>
 
                     <!-- 設定のリセット -->

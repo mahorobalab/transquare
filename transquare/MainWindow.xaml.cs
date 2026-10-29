@@ -1,9 +1,11 @@
 using System;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Interop;
@@ -18,6 +20,7 @@ using Brushes = System.Windows.Media.Brushes;
 using Application = System.Windows.Application;
 using Cursors = System.Windows.Input.Cursors;
 using MessageBox = System.Windows.MessageBox;
+using MenuItem = System.Windows.Controls.MenuItem;
 
 namespace ScreenFrame
 {
@@ -209,6 +212,7 @@ namespace ScreenFrame
                     // 初回起動時は画面中央に配置
                     WindowStartupLocation = WindowStartupLocation.CenterScreen;
                 }
+                UpdateAllMenuChecks();
             }
             catch { }
         }
@@ -294,6 +298,7 @@ namespace ScreenFrame
 
             SaveSettings();
             ApplyLanguage(currentLang);
+            UpdateAllMenuChecks();
             UpdateUIState();
 
             ShowBriefHud("設定をリセットしました", "Settings Reset", "初期状態に戻しました");
@@ -334,6 +339,7 @@ namespace ScreenFrame
                 committedOpacity = p.Opacity;
                 FrameBorder.Opacity = committedOpacity;
 
+                UpdateAllMenuChecks();
                 SaveSettings();
 
                 string applyMsg = (currentLang == "ja")
@@ -506,6 +512,7 @@ namespace ScreenFrame
                 double dpiX = source?.CompositionTarget?.TransformToDevice.M11 ?? 1.0;
                 double dpiY = source?.CompositionTarget?.TransformToDevice.M22 ?? 1.0;
 
+                UpdateAllMenuChecks();
                 MainMenu.Placement = PlacementMode.AbsolutePoint;
                 MainMenu.HorizontalOffset = p.X / dpiX;
                 MainMenu.VerticalOffset = p.Y / dpiY;
@@ -792,6 +799,7 @@ namespace ScreenFrame
 
         private void OpenContextMenu(FrameworkElement target)
         {
+            UpdateAllMenuChecks();
             MainMenu.PlacementTarget = target;
             MainMenu.Placement = PlacementMode.Top;
             MainMenu.HorizontalOffset = 0;
@@ -836,6 +844,7 @@ namespace ScreenFrame
             if (sender is FrameworkElement fe && double.TryParse(fe.Tag?.ToString(), out double size))
             {
                 gridSize = size;
+                UpdateAllMenuChecks();
                 SaveSettings();
             }
         }
@@ -856,6 +865,7 @@ namespace ScreenFrame
             {
                 committedThickness = new Thickness(thickness);
                 FrameBorder.BorderThickness = committedThickness;
+                UpdateAllMenuChecks();
                 SaveSettings();
             }
         }
@@ -876,6 +886,7 @@ namespace ScreenFrame
             {
                 committedOpacity = opacity;
                 FrameBorder.Opacity = committedOpacity;
+                UpdateAllMenuChecks();
                 SaveSettings();
             }
         }
@@ -899,6 +910,7 @@ namespace ScreenFrame
                 var brush = (Brush)new BrushConverter().ConvertFromString(colorName)!;
                 committedBrush = brush;
                 FrameBorder.BorderBrush = committedBrush;
+                UpdateAllMenuChecks();
                 SaveSettings();
             }
         }
@@ -1004,9 +1016,8 @@ namespace ScreenFrame
             MenuResetSettings.Header = isJa ? "設定をリセット..." : "Reset Settings...";
             MenuExit.Header = isJa ? "終了" : "Exit";
 
-            // 言語選択のチェックマーク状態
-            MenuLangJa.IsChecked = isJa;
-            MenuLangEn.IsChecked = !isJa;
+            // 選択中メニュー項目のチェックマーク更新
+            UpdateAllMenuChecks();
 
             // ツールチップなどの更新
             SettingsBtn.ToolTip = isJa
@@ -1038,6 +1049,39 @@ namespace ScreenFrame
                 ResizeGrip.ToolTip = isSizeLocked
                     ? (isJa ? "サイズロック中（設定メニューから解除できます）" : "Size locked (Unlock from settings menu)")
                     : (isJa ? "ドラッグしてサイズ変更（Altキーでグリッド吸着）" : "Drag to resize (Hold Alt for grid snap)");
+            }
+        }
+
+        // 各サブメニューの現在選択中項目にチェックマーク (IsChecked) を反映
+        private void UpdateAllMenuChecks()
+        {
+            UpdateGroupCheck(MenuGroupSnap, gridSize.ToString(CultureInfo.InvariantCulture));
+            UpdateGroupCheck(MenuGroupThickness, committedThickness.Left.ToString(CultureInfo.InvariantCulture));
+
+            if (MenuGroupOpacity != null)
+            {
+                foreach (var item in MenuGroupOpacity.Items.OfType<MenuItem>())
+                {
+                    if (double.TryParse(item.Tag?.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, out double val))
+                    {
+                        item.IsChecked = Math.Abs(val - committedOpacity) < 0.05;
+                    }
+                }
+            }
+
+            UpdateGroupCheck(MenuGroupColor, committedColorName);
+
+            if (MenuLangJa != null) MenuLangJa.IsChecked = (currentLang == "ja");
+            if (MenuLangEn != null) MenuLangEn.IsChecked = (currentLang == "en");
+        }
+
+        private void UpdateGroupCheck(MenuItem? parent, string currentValue)
+        {
+            if (parent == null) return;
+            foreach (var item in parent.Items.OfType<MenuItem>())
+            {
+                string? tag = item.Tag?.ToString();
+                item.IsChecked = string.Equals(tag, currentValue, StringComparison.OrdinalIgnoreCase);
             }
         }
 
