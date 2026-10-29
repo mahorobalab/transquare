@@ -641,13 +641,7 @@
             document.querySelectorAll('[data-ja]').forEach(el => {
                 const text = el.getAttribute(`data-${currentLang}`);
                 if (text) {
-                    if (el.tagName === 'SPAN' || el.children.length === 0) {
-                        el.innerHTML = text;
-                    } else if (el.querySelector('span')) {
-                        el.querySelector('span').innerHTML = text;
-                    } else {
-                        el.innerHTML = text;
-                    }
+                    el.innerHTML = text;
                 }
             });
         });
