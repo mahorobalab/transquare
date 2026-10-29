@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transquare - OBS配信・録画用デスクトップガイド枠オーバーレイ</title>
     <meta name="description" content="OBS配信や画面録画時に、どこが配信されているかを一目で確認できるデスクトップ赤枠オーバーレイアプリ。完全クリックスルー、Altグリッド吸着、タスクトレイ常駐に対応。">
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="icon.png">
+    <link rel="apple-touch-icon" href="icon.png">
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -57,13 +62,12 @@
             text-decoration: none;
         }
 
-        .logo-box {
+        .logo-img {
             width: 32px;
             height: 32px;
-            border: 3px solid var(--primary);
             border-radius: 6px;
-            background: rgba(255, 51, 68, 0.1);
-            position: relative;
+            object-fit: contain;
+            display: block;
         }
 
         .nav-links {
@@ -434,7 +438,7 @@
     <!-- Header Navigation -->
     <nav>
         <a href="#" class="logo">
-            <div class="logo-box"></div>
+            <img src="icon.png" alt="Transquare" class="logo-img">
             <span>Transquare</span>
         </a>
         <div class="nav-links">
