@@ -23,7 +23,7 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Restore dependencies
-        run: dotnet restore transquare.slnx
+        run: dotnet restore transquare/transquare.csproj
 
       - name: Publish Transquare
         run: >
