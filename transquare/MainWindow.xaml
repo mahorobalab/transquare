@@ -1,0 +1,235 @@
+<Window x:Class="ScreenFrame.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Transquare"
+        Height="1080"
+        Width="1920"
+        Icon="/andrsrxn-image-square.ico" 
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Topmost="True"
+        ShowInTaskbar="True"
+        WindowStartupLocation="Manual">
+
+    <Grid>
+        <!-- 
+          外側の枠線。
+          Background を null にしているため、内側は完全にマウスがすり抜けます（背後のアプリを直接操作可能）。
+          赤枠線上を左ドラッグで移動（Altキーでグリッド吸着）、右クリックで設定メニューが出ます。
+        -->
+        <Border x:Name="FrameBorder"
+                BorderBrush="Red"
+                BorderThickness="4"
+                Background="{x:Null}"
+                MouseLeftButtonDown="FrameBorder_MouseLeftButtonDown"
+                MouseMove="FrameBorder_MouseMove"
+                MouseLeftButtonUp="FrameBorder_MouseLeftButtonUp">
+            <Border.ContextMenu>
+                <ContextMenu x:Name="MainMenu" Closed="MainMenu_Closed">
+                    <MenuItem x:Name="MenuMoveLock" Header="移動をロック" IsCheckable="True" IsChecked="True" Click="MenuMoveLock_Click" />
+                    <MenuItem x:Name="MenuSizeLock" Header="サイズ変更をロック" IsCheckable="True" IsChecked="True" Click="MenuSizeLock_Click" />
+                    <MenuItem x:Name="MenuTopmost" Header="常に最前面" IsCheckable="True" IsChecked="True" Click="MenuTopmost_Click" />
+                    <MenuItem x:Name="MenuShowInTaskbar" Header="タスクバーに表示" IsCheckable="True" IsChecked="True" Click="MenuShowInTaskbar_Click" />
+                    <MenuItem x:Name="MenuToggleVisible" Header="枠を隠す (非表示)" Click="MenuToggleVisible_Click" />
+                    <Separator />
+
+                    <!-- 枠位置（一括移動） -->
+                    <MenuItem x:Name="MenuGroupPosition" Header="枠位置">
+                        <!-- 角 -->
+                        <MenuItem x:Name="MenuGroupCorners" Header="角">
+                            <MenuItem x:Name="MenuPosTopLeft" Header="左上" Click="MenuPosition_Click" Tag="TopLeft" />
+                            <MenuItem x:Name="MenuPosTopRight" Header="右上" Click="MenuPosition_Click" Tag="TopRight" />
+                            <MenuItem x:Name="MenuPosBottomLeft" Header="左下" Click="MenuPosition_Click" Tag="BottomLeft" />
+                            <MenuItem x:Name="MenuPosBottomRight" Header="右下" Click="MenuPosition_Click" Tag="BottomRight" />
+                        </MenuItem>
+                        <!-- 中央 -->
+                        <MenuItem x:Name="MenuGroupCenters" Header="中央">
+                            <MenuItem x:Name="MenuPosCenter" Header="画面中央" Click="MenuPosition_Click" Tag="Center" />
+                            <MenuItem x:Name="MenuPosTopCenter" Header="上・左右中央" Click="MenuPosition_Click" Tag="TopCenter" />
+                            <MenuItem x:Name="MenuPosBottomCenter" Header="下・左右中央" Click="MenuPosition_Click" Tag="BottomCenter" />
+                            <MenuItem x:Name="MenuPosLeftCenter" Header="左・上下中央" Click="MenuPosition_Click" Tag="LeftCenter" />
+                            <MenuItem x:Name="MenuPosRightCenter" Header="右・上下中央" Click="MenuPosition_Click" Tag="RightCenter" />
+                        </MenuItem>
+                    </MenuItem>
+
+                    <!-- ユーザープリセット ＆ 既定の解像度 -->
+                    <MenuItem x:Name="MenuGroupPresets" Header="プリセット">
+                        <!-- プリセット適用 -->
+                        <MenuItem x:Name="MenuGroupApplyPreset" Header="プリセットを適用">
+                            <MenuItem x:Name="MenuApplyPreset1" Header="プリセット 1 (空)" Click="MenuApplyPreset_Click" Tag="0" />
+                            <MenuItem x:Name="MenuApplyPreset2" Header="プリセット 2 (空)" Click="MenuApplyPreset_Click" Tag="1" />
+                            <MenuItem x:Name="MenuApplyPreset3" Header="プリセット 3 (空)" Click="MenuApplyPreset_Click" Tag="2" />
+                            <MenuItem x:Name="MenuApplyPreset4" Header="プリセット 4 (空)" Click="MenuApplyPreset_Click" Tag="3" />
+                        </MenuItem>
+                        <!-- プリセット保存 -->
+                        <MenuItem x:Name="MenuGroupSavePreset" Header="現在の状態を保存">
+                            <MenuItem x:Name="MenuSavePreset1" Header="プリセット 1 に保存" Click="MenuSavePreset_Click" Tag="0" />
+                            <MenuItem x:Name="MenuSavePreset2" Header="プリセット 2 に保存" Click="MenuSavePreset_Click" Tag="1" />
+                            <MenuItem x:Name="MenuSavePreset3" Header="プリセット 3 に保存" Click="MenuSavePreset_Click" Tag="2" />
+                            <MenuItem x:Name="MenuSavePreset4" Header="プリセット 4 に保存" Click="MenuSavePreset_Click" Tag="3" />
+                        </MenuItem>
+                        <!-- プリセット全クリア（保存があるときだけ表示） -->
+                        <MenuItem x:Name="MenuClearPresets" Header="プリセットをすべてクリア..." Click="MenuClearPresets_Click" Visibility="Collapsed" />
+                        <Separator />
+                        <MenuItem x:Name="MenuGroupPreset" Header="既定の解像度 (OBS用)">
+                            <MenuItem Header="1920 × 1080 (FHD 16:9)" Click="MenuPreset_Click" Tag="1920x1080" />
+                            <MenuItem Header="1280 × 720 (HD 16:9)" Click="MenuPreset_Click" Tag="1280x720" />
+                            <MenuItem x:Name="MenuPresetSquare" Header="1080 × 1080 (1:1 正方形)" Click="MenuPreset_Click" Tag="1080x1080" />
+                            <MenuItem Header="854 × 480 (SD 16:9)" Click="MenuPreset_Click" Tag="854x480" />
+                        </MenuItem>
+                    </MenuItem>
+                    <Separator />
+
+                    <MenuItem x:Name="MenuGroupSnap" Header="Alt吸着グリッドサイズ">
+                        <MenuItem x:Name="MenuSnap10" Header="10 px" Click="MenuGrid_Click" Tag="10" />
+                        <MenuItem x:Name="MenuSnap20" Header="20 px (標準)" Click="MenuGrid_Click" Tag="20" />
+                        <MenuItem x:Name="MenuSnap50" Header="50 px" Click="MenuGrid_Click" Tag="50" />
+                        <MenuItem x:Name="MenuSnap100" Header="100 px" Click="MenuGrid_Click" Tag="100" />
+                    </MenuItem>
+
+                    <!-- 枠の太さ（ホバーでリアルタイムプレビュー） -->
+                    <MenuItem x:Name="MenuGroupThickness" Header="枠の太さ">
+                        <MenuItem Header="2 px" Click="MenuThickness_Click" MouseEnter="MenuThickness_MouseEnter" Tag="2" />
+                        <MenuItem Header="4 px" Click="MenuThickness_Click" MouseEnter="MenuThickness_MouseEnter" Tag="4" />
+                        <MenuItem Header="6 px" Click="MenuThickness_Click" MouseEnter="MenuThickness_MouseEnter" Tag="6" />
+                        <MenuItem Header="8 px" Click="MenuThickness_Click" MouseEnter="MenuThickness_MouseEnter" Tag="8" />
+                    </MenuItem>
+
+                    <!-- 枠線の透明度（ホバーでリアルタイムプレビュー、クリックで確定） -->
+                    <MenuItem x:Name="MenuGroupOpacity" Header="枠線の不透明度">
+                        <MenuItem x:Name="MenuOpacity100" Header="100% (標準)" Click="MenuOpacity_Click" MouseEnter="MenuOpacity_MouseEnter" Tag="1.0" />
+                        <MenuItem Header="90%" Click="MenuOpacity_Click" MouseEnter="MenuOpacity_MouseEnter" Tag="0.9" />
+                        <MenuItem Header="80%" Click="MenuOpacity_Click" MouseEnter="MenuOpacity_MouseEnter" Tag="0.8" />
+                        <MenuItem Header="70%" Click="MenuOpacity_Click" MouseEnter="MenuOpacity_MouseEnter" Tag="0.7" />
+                        <MenuItem Header="60%" Click="MenuOpacity_Click" MouseEnter="MenuOpacity_MouseEnter" Tag="0.6" />
+                        <MenuItem Header="50%" Click="MenuOpacity_Click" MouseEnter="MenuOpacity_MouseEnter" Tag="0.5" />
+                        <MenuItem Header="40%" Click="MenuOpacity_Click" MouseEnter="MenuOpacity_MouseEnter" Tag="0.4" />
+                        <MenuItem Header="30%" Click="MenuOpacity_Click" MouseEnter="MenuOpacity_MouseEnter" Tag="0.3" />
+                        <MenuItem Header="20%" Click="MenuOpacity_Click" MouseEnter="MenuOpacity_MouseEnter" Tag="0.2" />
+                        <MenuItem Header="10%" Click="MenuOpacity_Click" MouseEnter="MenuOpacity_MouseEnter" Tag="0.1" />
+                    </MenuItem>
+
+                    <!-- 枠の色（ホバーでリアルタイムプレビュー、クリックで確定） -->
+                    <MenuItem x:Name="MenuGroupColor" Header="枠の色">
+                        <MenuItem x:Name="MenuColorRed" Header="赤 (Red)" Click="MenuColor_Click" MouseEnter="MenuColor_MouseEnter" Tag="Red" />
+                        <MenuItem x:Name="MenuColorCyan" Header="青 (Cyan)" Click="MenuColor_Click" MouseEnter="MenuColor_MouseEnter" Tag="Cyan" />
+                        <MenuItem x:Name="MenuColorLime" Header="緑 (Lime)" Click="MenuColor_Click" MouseEnter="MenuColor_MouseEnter" Tag="Lime" />
+                        <MenuItem x:Name="MenuColorYellow" Header="黄 (Yellow)" Click="MenuColor_Click" MouseEnter="MenuColor_MouseEnter" Tag="Yellow" />
+                        <MenuItem x:Name="MenuColorWhite" Header="白 (White)" Click="MenuColor_Click" MouseEnter="MenuColor_MouseEnter" Tag="White" />
+                    </MenuItem>
+                    <Separator />
+
+                    <!-- 言語切り替えメニュー -->
+                    <MenuItem x:Name="MenuGroupLanguage" Header="言語 (Language)">
+                        <MenuItem x:Name="MenuLangJa" Header="日本語" Click="MenuLang_Click" Tag="ja" />
+                        <MenuItem x:Name="MenuLangEn" Header="English" Click="MenuLang_Click" Tag="en" />
+                    </MenuItem>
+
+                    <!-- 設定のリセット -->
+                    <MenuItem x:Name="MenuResetSettings" Header="設定をリセット..." Click="MenuResetSettings_Click" />
+
+                    <Separator />
+                    <MenuItem x:Name="MenuExit" Header="終了" Click="MenuExit_Click" />
+                </ContextMenu>
+            </Border.ContextMenu>
+        </Border>
+
+        <!-- 
+          移動時・サイズ変更時に中央に大きく表示する情報HUD（ヘッドアップディスプレイ）
+          IsHitTestVisible="False" なので、マウス操作を一切妨げません
+        -->
+        <Border x:Name="HudOverlay"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="#EE141414"
+                BorderBrush="#88FF3333"
+                BorderThickness="2"
+                CornerRadius="8"
+                Padding="28,14"
+                IsHitTestVisible="False"
+                Visibility="Collapsed">
+            <StackPanel HorizontalAlignment="Center">
+                <TextBlock x:Name="HudTitle"
+                           FontSize="13"
+                           FontWeight="SemiBold"
+                           Foreground="#FFAAAAAA"
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,4"
+                           Text="位置 (ディスプレイ左上から)" />
+                <TextBlock x:Name="HudMainText"
+                           FontSize="32"
+                           FontWeight="Bold"
+                           Foreground="#FFFFFFFF"
+                           HorizontalAlignment="Center"
+                           Text="X (左): 192 px   Y (上): 108 px" />
+                <TextBlock x:Name="HudSubText"
+                           FontSize="13"
+                           FontWeight="Medium"
+                           Foreground="#FF55FF55"
+                           HorizontalAlignment="Center"
+                           Margin="0,6,0,0"
+                           Text="⚡ Altグリッド吸着中 (20px)" />
+            </StackPanel>
+        </Border>
+
+        <!-- 
+          赤枠の右下・内側に配置する操作コントロール
+        -->
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Margin="0,0,6,6">
+
+            <!-- ⚙ 設定ボタン -->
+            <Button x:Name="SettingsBtn"
+                    Content="⚙"
+                    FontSize="13"
+                    Width="24"
+                    Height="24"
+                    Background="#E6222222"
+                    Foreground="White"
+                    BorderBrush="#888888"
+                    BorderThickness="1"
+                    Cursor="Hand"
+                    ToolTip="設定メニュー (クリックまたは右クリック)"
+                    Click="SettingsBtn_Click"
+                    MouseRightButtonUp="SettingsBtn_MouseRightButtonUp">
+                <Button.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="3" />
+                    </Style>
+                </Button.Resources>
+            </Button>
+
+            <!-- リサイズ用の小さな四角（Thumb） -->
+            <Thumb x:Name="ResizeGrip"
+                   Width="18"
+                   Height="24"
+                   Margin="3,0,0,0"
+                   Cursor="SizeNWSE"
+                   ToolTip="ドラッグしてサイズ変更（Altキーでグリッド吸着）"
+                   DragStarted="ResizeGrip_DragStarted"
+                   DragDelta="ResizeGrip_DragDelta"
+                   DragCompleted="ResizeGrip_DragCompleted">
+                <Thumb.Template>
+                    <ControlTemplate>
+                        <Border x:Name="GripBorder"
+                                Background="#E6333333"
+                                BorderBrush="#888888"
+                                BorderThickness="1"
+                                CornerRadius="3">
+                            <!-- 斜めのグリップ模様 -->
+                            <Path Data="M 3,15 L 11,7 M 6,15 L 11,10"
+                                  Stroke="White"
+                                  StrokeThickness="1.5"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Thumb.Template>
+            </Thumb>
+        </StackPanel>
+    </Grid>
+
+</Window>
